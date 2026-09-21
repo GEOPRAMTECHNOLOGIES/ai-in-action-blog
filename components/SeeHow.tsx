@@ -63,7 +63,7 @@ export function SeeHow() {
           window.clearInterval(timer); setAccessCode(data.accessCode || ""); setExpiresAt(data.expiresAt || null); setStep("success"); return;
         }
         if (data.status === "FAILED") {
-          window.clearInterval(timer); setError(data.resultDesc || "The payment was not completed."); setStep("form"); return;
+          window.clearInterval(timer); setError(formatPaymentError(data.resultCode, data.resultDesc)); setStep("form"); return;
         }
       } catch { /* keep polling */ }
       if (count >= 60) {
@@ -71,6 +71,18 @@ export function SeeHow() {
         setMessage("We are still waiting for Safaricom confirmation. Your access will be emailed automatically if payment completes.");
       }
     }, 3000);
+  };
+
+  const formatPaymentError = (code?: number, desc?: string | null) => {
+    const d = String(desc || "").toLowerCase();
+    if (d.includes("unresolved reason") || d.includes("system error")) {
+      return "Safaricom could not complete this M-Pesa request. No access was created. Please try again, and if it keeps happening verify that the Daraja transaction type and merchant number match your PayBill/Till setup.";
+    }
+    if (d.includes("cancelled") || d.includes("canceled")) return "The M-Pesa payment was cancelled. You were not charged.";
+    if (d.includes("insufficient")) return "The M-Pesa payment could not be completed because there were insufficient funds.";
+    if (code === 1032) return "The M-Pesa request was cancelled on the phone. Please try again.";
+    if (code === 1) return "The M-Pesa payment could not be completed because of insufficient funds.";
+    return "Safaricom did not complete the payment. Please try again.";
   };
 
   const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(email);
@@ -85,12 +97,12 @@ export function SeeHow() {
         <div className="checkout-backdrop" role="presentation" onMouseDown={e => e.target === e.currentTarget && close()}>
           <section className="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
             <div className="modal-topbar">
-              <div className="modal-brand"><span className="brand-dot">✦</span><span>GEOPRAM AI</span></div>
+              <div className="modal-brand"><img className="modal-logo" src="/geopram-ai-logo.png" alt="GeoPram AI" /><span>GEOPRAM AI</span><small>Powered by GeoPram Technologies</small></div>
               {step !== "payment" && <button className="close-button" aria-label="Close" onClick={close}>×</button>}
             </div>
 
             {step === "terms" && <div className="modal-body">
-              <div className="modal-badge">AI EXPERIENCE</div>
+              <div className="modal-intro-brand"><img src="/geopram-ai-logo.png" alt="GeoPram AI" /></div><div className="modal-badge">AI EXPERIENCE</div>
               <h2 id="checkout-title">See how AI can change your workflow.</h2>
               <p className="modal-subtitle">Get private access to the GeoPram Technologies AI guide and practical ideas you can start using immediately.</p>
               <div className="feature-list">
@@ -105,6 +117,7 @@ export function SeeHow() {
             </div>}
 
             {step === "form" && <div className="modal-body">
+              <div className="form-hero"><img src="/geopram-ai-logo.png" alt="GeoPram AI" /><div><div className="modal-badge">GEOPRAM AI EXPERIENCE</div><strong>Secure access checkout</strong></div></div>
               <div className="step-line"><span>STEP 1</span><i></i><span>PAYMENT</span></div>
               <h2 id="checkout-title">Where should we send your access?</h2>
               <p className="modal-subtitle">Use an email you check regularly and the Kenyan M-Pesa number that should receive the STK prompt.</p>
@@ -120,7 +133,7 @@ export function SeeHow() {
               {phone && !validPhone && <div className="field-error">Use a valid Kenyan mobile number, e.g. 0712 345 678.</div>}
 
               <div className="order-summary"><span><b>AI guide access</b><small>Personal access · 30 days</small></span><strong>{amountKes ? `KES ${amountKes.toLocaleString()}` : "KES —"}</strong></div>
-              {error && <div className="error-box">{error}</div>}
+              {error && <div className="error-box" role="alert"><strong>Payment not completed</strong><span>{error}</span><small>Nothing is granted until Safaricom confirms a successful payment.</small></div>}
               <button className="primary-action" disabled={!canPay} onClick={submit}>Continue to M-Pesa <span>→</span></button>
               <div className="security-line"><span>🔒</span> Secure checkout · Safaricom M-Pesa</div>
             </div>}

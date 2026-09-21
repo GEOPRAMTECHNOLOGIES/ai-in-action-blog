@@ -12,16 +12,11 @@ export async function getDarajaToken(): Promise<string> {
   const secret = required("DARAJA_CONSUMER_SECRET");
   const basic = Buffer.from(`${key}:${secret}`).toString("base64");
 
-  const response = await fetch(
-    `${base}/oauth/v1/generate?grant_type=client_credentials`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Basic ${basic}`
-      },
-      cache: "no-store"
-    }
-  );
+  const response = await fetch(`${base}/oauth/v1/generate?grant_type=client_credentials`, {
+    method: "GET",
+    headers: { Authorization: `Basic ${basic}` },
+    cache: "no-store"
+  });
 
   const text = await response.text();
   if (!response.ok) throw new Error(`Daraja OAuth failed: ${response.status} ${text}`);
@@ -41,6 +36,16 @@ export async function initiateStkPush(params: {
   const shortcode = required("DARAJA_SHORTCODE");
   const passkey = required("DARAJA_PASSKEY");
   const callbackUrl = required("DARAJA_CALLBACK_URL");
+  const transactionType = (process.env.DARAJA_TRANSACTION_TYPE || "CustomerPayBillOnline") as
+    | "CustomerPayBillOnline"
+    | "CustomerBuyGoodsOnline";
+
+  const isTill = transactionType === "CustomerBuyGoodsOnline";
+  const till = process.env.DARAJA_TILL_NUMBER;
+  if (isTill && !till) throw new Error("DARAJA_TILL_NUMBER is required for CustomerBuyGoodsOnline");
+
+  const businessShortCode = Number(isTill ? till : shortcode);
+  const partyB = businessShortCode;
 
   const timestamp = nowNairobiStamp();
   const password = stkPassword(shortcode, passkey, timestamp);
@@ -53,13 +58,13 @@ export async function initiateStkPush(params: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      BusinessShortCode: Number(shortcode),
+      BusinessShortCode: businessShortCode,
       Password: password,
       Timestamp: timestamp,
-      TransactionType: "CustomerPayBillOnline",
+      TransactionType: transactionType,
       Amount: Math.max(1, Math.round(params.amountKes)),
       PartyA: params.phone,
-      PartyB: Number(shortcode),
+      PartyB: partyB,
       PhoneNumber: params.phone,
       CallBackURL: callbackUrl,
       AccountReference: params.accountReference.slice(0, 12),
@@ -70,15 +75,8 @@ export async function initiateStkPush(params: {
 
   const text = await response.text();
   let data: any;
-  try {
-    data = JSON.parse(text);
-  } catch {
-    data = { raw: text };
-  }
+  try { data = JSON.parse(text); } catch { data = { raw: text }; }
 
-  if (!response.ok) {
-    throw new Error(`Daraja STK Push failed: ${response.status} ${text}`);
-  }
-
+  if (!response.ok) throw new Error(`Daraja STK Push failed: ${response.status} ${text}`);
   return data;
 }

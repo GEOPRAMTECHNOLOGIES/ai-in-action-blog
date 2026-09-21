@@ -115,3 +115,30 @@ The payment amount is controlled by:
 The access duration is controlled by:
 
 `ACCESS_DAYS`
+
+## Important M-Pesa setup for Till vs PayBill
+
+The checkout supports both Daraja STK modes. Set `DARAJA_TRANSACTION_TYPE` to match the merchant account configured in your Safaricom Daraja production app:
+
+- `CustomerPayBillOnline` → uses `DARAJA_SHORTCODE` as the business short code.
+- `CustomerBuyGoodsOnline` → uses `DARAJA_TILL_NUMBER` as the business/till number.
+
+The previous build always sent `CustomerPayBillOnline` and ignored the Till number. If your production account is meant to collect through the Till, that can cause Safaricom to reject the request or return a generic failure such as `Failed due to an unresolved reason type.`
+
+The UI now translates generic Safaricom failures into a clearer customer message instead of exposing the raw gateway wording.
+
+For a Till setup, use:
+
+```env
+DARAJA_TRANSACTION_TYPE=CustomerBuyGoodsOnline
+DARAJA_TILL_NUMBER=YOUR_TILL_NUMBER
+```
+
+For a PayBill setup, use:
+
+```env
+DARAJA_TRANSACTION_TYPE=CustomerPayBillOnline
+DARAJA_SHORTCODE=YOUR_PAYBILL_NUMBER
+```
+
+Verify the production values against the merchant account/app in the official Safaricom Daraja portal before going live.

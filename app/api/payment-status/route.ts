@@ -17,6 +17,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       status: payment.status,
+      resultCode: payment.resultCode ?? null,
       resultDesc: payment.resultDesc || null,
       accessCode: payment.status === "SUCCESS" ? payment.accessCode : null,
       expiresAt: payment.status === "SUCCESS" ? payment.expiresAt : null
