@@ -21,9 +21,18 @@ def db():
             raise RuntimeError('MONGODB_URI is not configured in Vercel.')
         client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=8000)
         _db = client[DB_NAME]
-        _db.payments.create_index('id', unique=True)
-        _db.payments.create_index('checkoutRequestId', unique=True, sparse=True)
-        _db.access.create_index('code', unique=True)
+        # Older deployments may already have a non-sparse unique `id_1` index.
+        # That index rejects multiple legacy documents where `id` is missing/null.
+        # Remove only the old index on this field, then create a sparse unique index.
+        try:
+            for index_name, info in _db.payments.index_information().items():
+                if index_name != '_id_' and info.get('key') == [('id', 1)]:
+                    _db.payments.drop_index(index_name)
+        except Exception:
+            pass
+        _db.payments.create_index('id', unique=True, sparse=True, name='payment_id_unique')
+        _db.payments.create_index('checkoutRequestId', unique=True, sparse=True, name='checkout_request_unique')
+        _db.access.create_index('code', unique=True, sparse=True, name='access_code_unique')
     return _db
 
 def env(name, default=''):
