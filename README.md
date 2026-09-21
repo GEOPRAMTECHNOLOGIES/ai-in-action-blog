@@ -15,7 +15,7 @@ DARAJA_TILL_NUMBER=YOUR_TILL_NUMBER
 DARAJA_PASSKEY=YOUR_PASSKEY
 DARAJA_CONSUMER_KEY=YOUR_CONSUMER_KEY
 DARAJA_CONSUMER_SECRET=YOUR_CONSUMER_SECRET
-DARAJA_CALLBACK_URL=https://ai-in-action-blog.vercel.app/api/payments/callback
+DARAJA_CALLBACK_URL=https://new-new-ai-in-action-blog.vercel.app/api/payments/callback
 
 MONGODB_URI=YOUR_MONGODB_URI
 DATABASE_NAME=geopram_ai
@@ -28,7 +28,7 @@ SMTP_USERNAME=YOUR_SMTP_USERNAME
 SMTP_PASSWORD=YOUR_SMTP_APP_PASSWORD
 SMTP_FROM=no-reply@example.com
 ADMIN_EMAIL=YOUR_ADMIN_EMAIL
-NEXT_PUBLIC_SITE_URL=https://ai-in-action-blog.vercel.app
+NEXT_PUBLIC_SITE_URL=https://new-new-ai-in-action-blog.vercel.app
 ```
 
 ### Daraja fields

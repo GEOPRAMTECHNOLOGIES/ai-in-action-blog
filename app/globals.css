@@ -105,3 +105,28 @@ button,input{font-family:inherit}
 .order-summary{margin-top:18px;box-shadow:0 2px 8px rgba(0,0,0,.03)}
 .checkout-modal{width:min(650px,100%);border-radius:26px}.modal-body{padding:30px 34px 30px}
 @media(max-width:620px){.modal-brand small{display:none}.modal-topbar{padding:0 16px}.modal-body{padding:24px 17px}.form-hero{margin-bottom:16px}.input-card{grid-template-columns:48px 1fr;padding:13px;min-height:88px}.input-badge{width:43px;height:43px}.input-copy input{font-size:16px}}
+
+/* Premium post-payment experience — does not change payment logic */
+.success-state{background:radial-gradient(circle at 50% 0%,#f5f9ff 0,#fff 42%);min-height:520px;position:relative;overflow:hidden}
+.success-state:before,.success-state:after{content:"";position:absolute;border-radius:50%;pointer-events:none;filter:blur(2px);opacity:.6}
+.success-state:before{width:180px;height:180px;top:-110px;right:-75px;background:#e8dfff}
+.success-state:after{width:150px;height:150px;bottom:-100px;left:-60px;background:#dff2ff}
+.success-brand{width:76px;height:76px;border-radius:22px;display:grid;place-items:center;background:rgba(255,255,255,.9);border:1px solid #e0e8f2;box-shadow:0 12px 30px rgba(35,74,120,.12);margin-bottom:16px;z-index:1}
+.success-brand img{width:62px;height:62px;object-fit:contain}
+.success-state .success-mark{width:58px;height:58px;font-size:30px;margin-bottom:15px;box-shadow:0 10px 25px rgba(16,124,16,.18);z-index:1}
+.success-state .modal-badge,.success-state h2,.success-state .modal-subtitle,.success-card,.success-next,.success-state .link-action,.success-footnote{position:relative;z-index:1}
+.success-state h2{font-size:34px;margin-bottom:10px}
+.success-state .modal-subtitle{max-width:500px;margin-bottom:18px}
+.success-card{width:min(430px,100%);padding:17px 18px 14px;border:1px solid #dfe6ef;border-radius:18px;background:rgba(255,255,255,.94);box-shadow:0 14px 34px rgba(28,50,80,.08)}
+.success-card-label{font-size:10px;letter-spacing:1.8px;font-weight:900;color:#6b6b6b;margin-bottom:9px}
+.access-code{margin:0;padding:13px 14px;background:linear-gradient(105deg,#f2edff,#eef7ff);border:1px solid #e2dafa;color:#4d328a;border-radius:12px;font-size:25px;letter-spacing:3px;white-space:nowrap;overflow:auto}
+.copy-code{margin-top:10px;border:1px solid #cfd8e3;background:#fff;border-radius:9px;padding:8px 13px;font-size:12px;font-weight:800;color:#0f6cbd;cursor:pointer}
+.copy-code:hover{background:#f4f9fd}
+.expiry-row{display:flex;justify-content:space-between;gap:12px;padding-top:13px;margin-top:12px;border-top:1px solid #edf0f3;font-size:11px;color:#666}
+.expiry-row strong{color:#242424}
+.success-next{width:min(430px,100%);display:flex;gap:11px;align-items:flex-start;text-align:left;margin-top:13px;padding:12px 14px;border-radius:14px;background:#f8fbff;border:1px solid #e2edf7}
+.success-next-icon{width:29px;height:29px;display:grid;place-items:center;border-radius:9px;background:#e9f4fc;color:#0f6cbd;flex:0 0 auto}
+.success-next div{display:flex;flex-direction:column;gap:3px}.success-next strong{font-size:12px}.success-next small{font-size:10.5px;line-height:1.4;color:#6b6b6b}
+.success-state .link-action{width:min(430px,100%);margin-top:14px}
+.success-footnote{font-size:10.5px;color:#777;margin-top:12px}.success-footnote span{color:#107c10;font-weight:900}.success-footnote i{font-style:normal;margin:0 5px;color:#bbb}
+@media(max-width:620px){.success-state{min-height:480px}.success-state h2{font-size:27px}.success-brand{width:66px;height:66px}.success-brand img{width:54px;height:54px}.access-code{font-size:20px;letter-spacing:2px}.success-card,.success-next,.success-state .link-action{width:100%}}

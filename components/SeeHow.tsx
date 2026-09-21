@@ -15,6 +15,7 @@ export function SeeHow() {
   const [error, setError] = useState("");
   const [accessCode, setAccessCode] = useState("");
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
   const [amountKes, setAmountKes] = useState<number | null>(null);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export function SeeHow() {
 
   const reset = () => {
     setStep("terms"); setTerms(false); setEmail(""); setPhone("");
-    setPaymentId(""); setMessage(""); setError(""); setAccessCode(""); setExpiresAt(null);
+    setPaymentId(""); setMessage(""); setError(""); setAccessCode(""); setExpiresAt(null); setCopied(false);
   };
 
   const start = () => { reset(); setOpen(true); };
@@ -145,7 +146,26 @@ export function SeeHow() {
             </div>}
 
             {step === "success" && <div className="modal-body success-state">
-              <div className="success-mark">✓</div><div className="modal-badge">PAYMENT CONFIRMED</div><h2>Your access is ready.</h2><p className="modal-subtitle">Your receipt and access code have been sent to <b>{email}</b>.</p><div className="access-code">{accessCode}</div>{expiresAt && <small className="muted">Access expires {new Date(expiresAt).toLocaleDateString()}</small>}<a className="primary-action link-action" href={`/access/${encodeURIComponent(accessCode)}`}>Open the AI guide <span>→</span></a></div>}
+              <div className="success-brand"><img src="/geopram-ai-logo.png" alt="GeoPram AI" /></div>
+              <div className="success-mark">✓</div>
+              <div className="modal-badge">PAYMENT CONFIRMED</div>
+              <h2>Your AI access is ready.</h2>
+              <p className="modal-subtitle">Thank you. Your access code has been created and your receipt has been sent to <b>{email}</b>.</p>
+              <div className="success-card">
+                <div className="success-card-label">YOUR ACCESS CODE</div>
+                <div className="access-code">{accessCode}</div>
+                <button className="copy-code" type="button" onClick={async () => { try { await navigator.clipboard.writeText(accessCode); setCopied(true); window.setTimeout(() => setCopied(false), 1800); } catch {} }}>
+                  {copied ? "Copied ✓" : "Copy code"}
+                </button>
+                {expiresAt && <div className="expiry-row"><span>Access valid until</span><strong>{new Date(expiresAt).toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" })}</strong></div>}
+              </div>
+              <div className="success-next">
+                <span className="success-next-icon">✦</span>
+                <div><strong>You're ready to explore.</strong><small>Open the AI guide now. You can also use the emailed code later.</small></div>
+              </div>
+              <a className="primary-action link-action" href={`/access/${encodeURIComponent(accessCode)}`}>Open the AI guide <span>→</span></a>
+              <div className="success-footnote"><span>✓</span> Securely confirmed with M-Pesa <i>·</i> GeoPram Technologies</div>
+            </div>}
           </section>
         </div>
       )}
