@@ -73,6 +73,7 @@ export async function POST(request: Request) {
 
       return NextResponse.json({
         paymentId,
+        amountKes: Math.round(amountKes),
         message: stk.CustomerMessage || "Check your phone and enter your M-Pesa PIN."
       });
     } catch (error: any) {
