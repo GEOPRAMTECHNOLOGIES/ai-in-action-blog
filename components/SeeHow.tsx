@@ -62,7 +62,7 @@ export function SeeHow() {
         if (data.status === "SUCCESS") {
           window.clearInterval(timer); setAccessCode(data.accessCode || ""); setExpiresAt(data.expiresAt || null); setStep("success"); return;
         }
-        if (data.status === "FAILED") {
+        if (data.status === "FAILED" || data.status === "CANCELLED") {
           window.clearInterval(timer); setError(formatPaymentError(data.resultCode, data.resultDesc)); setStep("form"); return;
         }
       } catch { /* keep polling */ }

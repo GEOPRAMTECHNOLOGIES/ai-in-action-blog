@@ -1,25 +1,20 @@
 {
-  "name": "geopram-ai-see-how",
+  "name": "geopram-ai-blog",
   "version": "1.0.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
+  "scripts": {"dev":"next dev","build":"next build","start":"next start"},
   "dependencies": {
-    "@fluentui/react-components": "^9.70.0",
-    "mongodb": "^6.18.0",
-    "next": "^14.2.31",
-    "nodemailer": "^7.0.6",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "mongodb":"^6.18.0",
+    "next":"^14.2.31",
+    "nodemailer":"^7.0.6",
+    "react":"^18.3.1",
+    "react-dom":"^18.3.1"
   },
   "devDependencies": {
-    "@types/node": "^22.18.0",
-    "@types/nodemailer": "^6.4.17",
-    "@types/react": "^18.3.24",
-    "@types/react-dom": "^18.3.7",
-    "typescript": "^5.9.2"
+    "@types/node":"^22.18.0",
+    "@types/nodemailer":"^6.4.17",
+    "@types/react":"^18.3.24",
+    "@types/react-dom":"^18.3.7",
+    "typescript":"^5.9.2"
   }
 }
